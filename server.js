@@ -26,8 +26,8 @@ const resolvers = {
         }
     },
     Mutation: {
-        addTodo: (_, args) => {
-            const todo = {task: args.task, completed: args.completed};
+        addTodo: (_, {task, completed}) => {
+            const todo = {task, completed};
             todos.push(todo);
             return todo;
         }
