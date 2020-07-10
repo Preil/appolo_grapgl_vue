@@ -12,11 +12,22 @@ const typeDefs = gql`
         completed: Boolean
     }
     type Query {
-        todos: [Todo]
+        getTodos: [Todo]
     }
 `;
+
+const resolvers = {
+    Query: {
+        getTodos: function(){
+            return todos
+        }
+    }
+}
+
+
 const server = new ApolloServer({
-    typeDefs
+    typeDefs,
+    resolvers
 });
 
 server.listen(4500).then(({url}) => {
