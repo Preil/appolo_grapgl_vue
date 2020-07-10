@@ -1,8 +1,8 @@
 const {ApolloServer, gql} = require("apollo-server");
 
 const todos = [
-    { task: 'wash car', completed: false },
-    { task: 'Clean room', completed: true }
+    {task: 'wash car', completed: false},
+    {task: 'Clean room', completed: true}
 ];
 
 const typeDefs = gql`
@@ -14,12 +14,22 @@ const typeDefs = gql`
     type Query {
         getTodos: [Todo]
     }
+    type Mutation {
+        addTodo(task: String, completed: Boolean): Todo
+    }
 `;
 
 const resolvers = {
     Query: {
-        getTodos: function(){
+        getTodos: function () {
             return todos
+        }
+    },
+    Mutation: {
+        addTodo: (_, args) => {
+            const todo = {task: args.task, completed: args.completed};
+            todos.push(todo);
+            return todo;
         }
     }
 }
