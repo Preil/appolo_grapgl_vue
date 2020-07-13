@@ -4,6 +4,7 @@ const typeDefs = gql`
         _id: ID
         username: String!
         email: String!
+        password: String!
         avatar: String
         joinDate: String
         favorites: [Post]
@@ -27,14 +28,16 @@ const typeDefs = gql`
         messageUser: User!
     }
 
-
-    type Todo {
-        task: String
-        completed: Boolean
-    }
+    
 
     type Query {
-        getTodos: [Todo]
+        getUser: User
+    }
+    
+    type Mutation {
+        addPost(title: String!, imageUrl: String!, categories: [String]!, 
+            description: String!, creatorId: ID!): Post!
+        signupUser(username: String!, email: String!, password: String!): User!
     }
 
 `;

@@ -1,6 +1,7 @@
 const {ApolloServer} = require("apollo-server");
 
 const typeDefs = require('./schema')
+const resolvers = require('./resolvers')
 
 const mongoose = require('mongoose');
 
@@ -21,6 +22,7 @@ mongoose
 
 const server = new ApolloServer({
     typeDefs,
+    resolvers,
     context: {
         User,
         Post
