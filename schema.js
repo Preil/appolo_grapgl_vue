@@ -17,7 +17,7 @@ const typeDefs = gql`
         description: String!
         createdDate: String
         likes: Int
-        createBy: User!
+        createdBy: User!
         message:[Message]
     }
 
@@ -31,7 +31,7 @@ const typeDefs = gql`
     
 
     type Query {
-        getUser: User
+        getPosts: [Post]
     }
     
     type Mutation {
