@@ -1,7 +1,8 @@
 <template>
     <v-container>
         <h1>Home</h1>
-        <ul v-for="post in getPosts" :key="post._id">
+        <div v-if="$apollo.loading">Loading...</div>
+        <ul v-else v-for="post in getPosts" :key="post._id">
             <li>
                 {{post.title}} <br>
                 {{post.imageUrl}} <br>
@@ -16,6 +17,11 @@
 
     export default {
         name: 'Home',
+        data(){
+            return {
+                posts: []
+            }
+        },
         apollo: {
             getPosts: {
                 query: gql `
@@ -27,7 +33,13 @@
                             description
                         }
                      }
-                `
+                `,
+                result({data, loading, networkStatus}){
+                    if (!loading){
+                        this.posts = data.getPosts;
+                        console.log("[networkStatus]", networkStatus);
+                    }
+                }
             }
         }
     }
