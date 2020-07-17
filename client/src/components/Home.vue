@@ -34,11 +34,12 @@
                         }
                      }
                 `,
-                result({data, loading, networkStatus}){
-                    if (!loading){
-                        this.posts = data.getPosts;
-                        console.log("[networkStatus]", networkStatus);
-                    }
+                result(args){
+                        console.dir(args);
+                    },
+                error(err) {
+                    console.error('[Errors:]', err);
+                    console.dir(err);
                 }
             }
         }
