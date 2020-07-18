@@ -1,15 +1,12 @@
 <template>
-    <v-container text-xs-center>
-
+    <v-container text-xs-senter>
         <v-flex xs12>
-            <v-carousel v-bind="{ 'cycle': true }" interval="3000">
-                <v-carousel-item v-for="post in getPosts" :key="post._id" :src="post.imageUrl">
+            <v-carousel vif="posts.length > 0" v-bind="{ 'cycle': true }" interval="3000">
+                <v-carousel-item v-for="post in posts" :key="post._id" :src="post.imageUrl">
                     <h1 id="carousel__title">{{post.title}}</h1>
                 </v-carousel-item>
             </v-carousel>
         </v-flex>
-
-
     </v-container>
 </template>
 
@@ -18,18 +15,19 @@
 
     export default {
         name: 'Home',
-        apollo: {
-            getPosts: gql `
-                query {
-                        getPosts {
-                            _id
-                            title
-                            imageUrl
-                            description
-                        }
-                }
-            `
-
+        created() {
+          this.handleGetCarouselPosts();
+        },
+        computed:{
+          posts() {
+              return this.$store.getters.posts;
+          }
+        },
+        methods: {
+            handleGetCarouselPosts(){
+                //reach out to Vuex store, fire action that gets Posts for carousel
+                this.$store.dispatch("getPosts");
+            }
         }
     }
 </script>
