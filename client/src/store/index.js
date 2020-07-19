@@ -8,16 +8,21 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        posts:[]
+        posts:[],
+        loading: false
     },
     mutations: {
         setPosts: (state, payload) => {
             state.posts = payload;
+        },
+        setLoading: (state, payload)=>{
+            state.loading = payload
         }
     },
     actions: {
         getPosts: () => {
             //use ApolloClient to fire getPosts query
+            store.commit('setLoading', true);
             apolloClient
                 .query({
                     query: gql`
@@ -33,15 +38,18 @@ export const store = new Vuex.Store({
                     //Get data from actions to state via mutation function
                     // commit passes data from actions along to mutation functions
                     store.commit('setPosts', data.getPosts);
+                    store.commit('setLoading', false);
                     console.log(data.getPosts);
             })
-            .catch(err => {
+        .catch(err => {
+                store.commit('setLoading', false);
                 console.error(err);
             })
         }
     },
     getters: {
-        posts: state => state.posts
+        posts: state => state.posts,
+        loading: state => state.loading
     },
     modules: {}
 });
