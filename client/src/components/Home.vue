@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import {gql} from "apollo-boost";
+
     import {mapGetters} from "vuex";
 
     export default {
