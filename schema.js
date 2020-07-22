@@ -28,9 +28,11 @@ const typeDefs = gql`
         messageDate: String
         messageUser: User!
     }
-
     
-
+    type Token {
+        token: String!
+    }
+    
     type Query {
         getPosts: [Post]
     }
@@ -38,8 +40,8 @@ const typeDefs = gql`
     type Mutation {
         addPost(title: String!, imageUrl: String!, categories: [String]!, 
             description: String!, creatorId: ID!): Post!
-        signinUser(username: String!, password: String!): User!
-        signupUser(username: String!, email: String!, password: String!): User!
+        signinUser(username: String!, password: String!): Token
+        signupUser(username: String!, email: String!, password: String!): Token
     }
 
 `;
