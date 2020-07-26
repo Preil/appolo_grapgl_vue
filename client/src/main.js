@@ -27,6 +27,16 @@ export const defaultClient = new ApolloClient({
                 authorization: localStorage.getItem('token')
             }
         })
+    },
+    onError: ({graphQLErrors, networkError})=>{
+        if(networkError){
+            console.log('[networkError]', networkError);
+        }
+        if(graphQLErrors){
+            for(let err of graphQLErrors){
+                console.dir(err);
+            }
+        }
     }
 });
 
