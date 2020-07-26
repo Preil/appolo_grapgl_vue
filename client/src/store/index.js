@@ -48,6 +48,7 @@ export const store = new Vuex.Store({
                 })
                 .then(({data})=>{
                     console.log(data.signinUser);
+                    localStorage.setItem("token", data.signinUser.token);
                 })
                 .catch(err=>{
                     console.error(err);
