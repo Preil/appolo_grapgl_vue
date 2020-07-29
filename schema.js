@@ -34,6 +34,7 @@ const typeDefs = gql`
     }
     
     type Query {
+        getCurrentUser: User
         getPosts: [Post]
     }
     

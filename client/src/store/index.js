@@ -3,24 +3,38 @@ import Vuex from 'vuex'
 
 import {defaultClient as apolloClient} from '../main.js'
 
-import {GET_POSTS, SIGNIN_USER} from './queries'
+import {GET_CURRENT_USER, GET_POSTS, SIGNIN_USER} from './queries'
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        posts:[],
+        posts: [],
         loading: false
     },
     mutations: {
         setPosts: (state, payload) => {
             state.posts = payload;
         },
-        setLoading: (state, payload)=>{
+        setLoading: (state, payload) => {
             state.loading = payload
         }
     },
     actions: {
+        getCurrentUser: ({commit}) => {
+            commit('setLoading', true);
+            apolloClient.query({
+                query: GET_CURRENT_USER
+            })
+                .then(({data}) => {
+                    commit('setLoading', false);
+                    console.log(data.getCurrentUser);
+                })
+                .catch(err => {
+                    store.commit('setLoading', false)
+                    console.error(err);
+                })
+        },
         getPosts: () => {
             //use ApolloClient to fire getPosts query
             store.commit('setLoading', true);
@@ -29,28 +43,28 @@ export const store = new Vuex.Store({
                 .query({
                     query: GET_POSTS
                 }).then(({data}) => {
-                    //Get data from actions to state via mutation function
-                    // commit passes data from actions along to mutation functions
-                    store.commit('setPosts', data.getPosts);
-                    store.commit('setLoading', false);
-                    console.log(data.getPosts);
-            })
-        .catch(err => {
+                //Get data from actions to state via mutation function
+                // commit passes data from actions along to mutation functions
+                store.commit('setPosts', data.getPosts);
                 store.commit('setLoading', false);
-                console.error(err);
+                console.log(data.getPosts);
             })
+                .catch(err => {
+                    store.commit('setLoading', false);
+                    console.error(err);
+                })
         },
-        signinUser: ({ commit }, payload) => {
+        signinUser: ({commit}, payload) => {
             apolloClient
                 .mutate({
                     mutation: SIGNIN_USER,
                     variables: payload
                 })
-                .then(({data})=>{
+                .then(({data}) => {
                     console.log(data.signinUser);
                     localStorage.setItem("token", data.signinUser.token);
                 })
-                .catch(err=>{
+                .catch(err => {
                     console.error(err);
                 });
         }

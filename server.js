@@ -5,6 +5,7 @@ const resolvers = require('./resolvers')
 
 const mongoose = require('mongoose');
 
+const jwt = require('jsonwebtoken');
 
 
 require('dotenv').config({path: 'variables.env'});
@@ -19,13 +20,24 @@ mongoose
     .then(() => console.log('DB connected'))
     .catch(err => console.error(err));
 
+const getUser = async token => {
+    if (token) {
+        try {
+            let user = await jwt.verify(token, process.env.SECRET);
+            console.log(user);
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+}
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: {
-        User,
-        Post
+    context: async ({req}) => {
+        const token = req.headers["authorization"];
+        return {User, Post, currentUser: await getUser(token)};
     }
 });
 

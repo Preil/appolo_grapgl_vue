@@ -3,12 +3,22 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const createToken = (user, secret, expiresIn) => {
-    const { username, email} = user;
+    const {username, email} = user;
     return jwt.sign({username, email}, secret, {expiresIn})
 };
 
 module.exports = {
     Query: {
+        getCurrentUser: async (_, args, {User, currentUser}) => {
+            if (!currentUser) {
+                return null;
+            }
+            const user = await User.findOne({username: currentUser.username}).populate({
+                path: 'favorites',
+                model: 'Post'
+            });
+            return user
+        },
         getPosts: async (_, args, {Post}) => {
             const posts = await Post.find({})
                 .sort({createdDate: "desc"})
