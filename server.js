@@ -23,10 +23,10 @@ mongoose
 const getUser = async token => {
     if (token) {
         try {
-            let user = await jwt.verify(token, process.env.SECRET);
-            console.log(user);
+            return await jwt.verify(token, process.env.SECRET);
         } catch (err) {
             console.log(err);
+
         }
 
     }

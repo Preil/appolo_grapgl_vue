@@ -21,7 +21,7 @@ export const GET_CURRENT_USER = gql`
             email
             password
             avatar
-            joindate
+            joinDate
             favorites {
                 _id
                 title
