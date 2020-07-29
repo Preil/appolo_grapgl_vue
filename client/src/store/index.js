@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '../router'
 
 import {defaultClient as apolloClient} from '../main.js'
 
@@ -10,9 +11,13 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         posts: [],
+        user: null,
         loading: false
     },
     mutations: {
+        setUser: (state, payload) => {
+            state.user = payload;
+        },
         setPosts: (state, payload) => {
             state.posts = payload;
         },
@@ -29,15 +34,17 @@ export const store = new Vuex.Store({
                 .then(({data}) => {
                     commit('setLoading', false);
                     console.log(data.getCurrentUser);
+                    // add user to state
+                    commit('setUser', data.getCurrentUser)
                 })
                 .catch(err => {
-                    store.commit('setLoading', false)
+                    commit('setLoading', false)
                     console.error(err);
                 })
         },
-        getPosts: () => {
+        getPosts: ({commit}) => {
             //use ApolloClient to fire getPosts query
-            store.commit('setLoading', true);
+            commit('setLoading', true);
             console.log(GET_POSTS);
             apolloClient
                 .query({
@@ -45,12 +52,12 @@ export const store = new Vuex.Store({
                 }).then(({data}) => {
                 //Get data from actions to state via mutation function
                 // commit passes data from actions along to mutation functions
-                store.commit('setPosts', data.getPosts);
-                store.commit('setLoading', false);
+                commit('setPosts', data.getPosts);
+                commit('setLoading', false);
                 console.log(data.getPosts);
             })
                 .catch(err => {
-                    store.commit('setLoading', false);
+                    commit('setLoading', false);
                     console.error(err);
                 })
         },
@@ -61,8 +68,8 @@ export const store = new Vuex.Store({
                     variables: payload
                 })
                 .then(({data}) => {
-                    console.log(data.signinUser);
                     localStorage.setItem("token", data.signinUser.token);
+                    router.go();
                 })
                 .catch(err => {
                     console.error(err);
@@ -71,6 +78,7 @@ export const store = new Vuex.Store({
     },
     getters: {
         posts: state => state.posts,
+        user: state => state.user,
         loading: state => state.loading
     },
     modules: {}

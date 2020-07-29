@@ -14,8 +14,8 @@ module.exports = {
                 return null;
             }
             const user = await User.findOne({username: currentUser.username}).populate({
-                path: 'favorites',
-                model: 'Post'
+                path: "favorites",
+                model: "Post"
             });
             return user
         },
