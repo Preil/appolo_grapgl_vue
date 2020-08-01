@@ -27,6 +27,14 @@
                             {{ item.title }}
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item v-if="user">
+                        <v-list-item-action>
+                            <v-icon>exit_to_app</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            Signout
+                        </v-list-item-content>
+                    </v-list-item>
                 </v-list>
             </v-navigation-drawer>
         </v-card>
@@ -63,6 +71,24 @@
                     </v-icon>
                     {{item.title}}
                 </v-btn>
+                <v-btn flat to="/profile" v-if="user"
+                       color="primary"
+                       depressed>
+                    <v-icon class="hidden-sm-only" left>account_box</v-icon>
+                    <!--<v-badge right color="blue darken-2">-->
+                        <!--&lt;!&ndash;<span slot="badge">1</span>&ndash;&gt;-->
+                    <!--</v-badge>-->
+                    Profile
+                </v-btn>
+                <v-btn flat to="/profile" v-if="user"
+                       color="primary"
+                       depressed>
+                    <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>
+                    <!--<v-badge right color="blue darken-2">-->
+                    <!--&lt;!&ndash;<span slot="badge">1</span>&ndash;&gt;-->
+                    <!--</v-badge>-->
+                    Signout
+                </v-btn>
             </v-toolbar>
 
 
@@ -80,23 +106,44 @@
 </template>
 
 <script>
+
+    import { mapGetters } from 'vuex';
+
     export default {
         name: 'App',
         computed: {
+
+            ...mapGetters(['user']),
+
             horizontalNavItems() {
-                return [
+                let items = [
                     {icon: 'chat', title: 'Posts', link: '/posts'},
                     {icon: 'lock_open', title: 'Sign In', link: '/signin'},
                     {icon: 'create', title: 'Sign Up', link: '/signup'}
                 ]
+                if (this.user){
+                    items = [
+                        {icon: 'chat', title: 'Posts', link: '/posts'}
+                    ]
+                }
+                return items;
 
             },
             sideNavItems() {
-                return [
+                let items = [
                     {icon: 'chat', title: 'Posts', link: '/posts'},
                     {icon: 'lock_open', title: 'Sign In', link: '/signin'},
                     {icon: 'create', title: 'Sign Up', link: '/signup'}
-                ]
+                ];
+                if(this.user){
+                    items = [
+                        {icon: 'chat', title: 'Posts', link: '/posts'},
+                        {icon: 'stars', title: 'Create Post', link: '/post/add'},
+                        {icon: 'account_box', title: 'Profile', link: '/profile'},
+
+                    ]
+                }
+                return items;
 
             }
         },
