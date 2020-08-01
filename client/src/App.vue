@@ -80,7 +80,8 @@
                     <!--</v-badge>-->
                     Profile
                 </v-btn>
-                <v-btn flat to="/profile" v-if="user"
+                <v-btn flat v-if="user"
+                       @click="handelSignoutUser"
                        color="primary"
                        depressed>
                     <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>
@@ -153,6 +154,9 @@
             }
         },
         methods: {
+            handelSignoutUser(){
+              this.$store.dispatch('signoutUser');
+            },
             toggleSideNav() {
                 this.sideNav = !this.sideNav
             }
