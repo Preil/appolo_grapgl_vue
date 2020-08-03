@@ -29,7 +29,11 @@
                             </v-layout>
                             <v-layout row>
                                 <v-flex xs-12>
-                                    <v-btn color="accent" type="submit">Signin</v-btn>
+                                    <v-btn :loading="loading" color="accent" type="submit">
+                                        <span slot="loader" class="custom-loader">
+                                            <v-icon light>cached</v-icon>
+                                        </span>
+                                        Signin</v-btn>
                                     <h3>Don't have an account?
                                         <router-link to="/signup">Signup</router-link>
                                     </h3>
@@ -56,7 +60,7 @@
             }
         },
         computed: {
-            ...mapGetters(['user', 'error'])
+            ...mapGetters(['loading', 'user', 'error'])
         },
         watch: {
             user(value) {
@@ -76,4 +80,43 @@
         }
     }
 </script>
+
+<style>
+    .custom-loader {
+        animation: loader 1s infinite;
+        display: flex;
+    }
+    @-moz-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @-webkit-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @-o-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 
