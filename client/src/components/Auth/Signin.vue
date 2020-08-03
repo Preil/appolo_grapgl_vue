@@ -2,6 +2,12 @@
     <v-container>
         <h1>Sign In</h1>
 
+        <v-layout v-if="error" row wrap>
+            <v-flex xs12 sm6 offset-sm3>
+                <form-alert :message="error.message"></form-alert>
+            </v-flex>
+        </v-layout>
+
 
         <!--Signin form-->
         <v-layout row wrap>
@@ -50,7 +56,7 @@
             }
         },
         computed: {
-            ...mapGetters(['user'])
+            ...mapGetters(['user', 'error'])
         },
         watch: {
             user(value) {

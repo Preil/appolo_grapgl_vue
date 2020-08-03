@@ -7,6 +7,10 @@ import '@babel/polyfill'
 
 import ApolloClient from 'apollo-boost';
 import VueApollo from 'vue-apollo';
+import FormAlert from './components/Shared/FormAlert'
+
+// Register component globally
+Vue.component('form-alert', FormAlert);
 
 Vue.use(VueApollo);
 
@@ -18,7 +22,7 @@ export const defaultClient = new ApolloClient({
     },
     request: operation => {
         // if no token in localStorage, add it
-        if(!localStorage.token) {
+        if (!localStorage.token) {
             localStorage.setItem('token', '');
         }
         // operation adds the token to an authorization header, which is sent to backend
@@ -28,12 +32,12 @@ export const defaultClient = new ApolloClient({
             }
         })
     },
-    onError: ({graphQLErrors, networkError})=>{
-        if(networkError){
+    onError: ({graphQLErrors, networkError}) => {
+        if (networkError) {
             console.log('[networkError]', networkError);
         }
-        if(graphQLErrors){
-            for(let err of graphQLErrors){
+        if (graphQLErrors) {
+            for (let err of graphQLErrors) {
                 console.dir(err);
             }
         }
