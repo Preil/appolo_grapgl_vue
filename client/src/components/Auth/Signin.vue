@@ -14,22 +14,22 @@
             <v-flex xs-12 sm6 offset-sm3>
                 <v-card class="mx-auto pa-xl-6 pa-sm-3 pa-xs-2" color="secondary" dark>
                     <v-container text-center>
-                        <v-form @submit.prevent="handleSigninUser">
+                        <v-form v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleSigninUser">
                             <v-layout row wrap>
                                 <v-flex xs-12>
-                                    <v-text-field v-model="username" prepend-icon="face" label="Username" type="text"
+                                    <v-text-field :rules="usernameRules" v-model="username" prepend-icon="face" label="Username" type="text"
                                                   required></v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout row>
                                 <v-flex xs-12>
-                                    <v-text-field v-model="password" prepend-icon="extension" label="Password"
+                                    <v-text-field :rules="passwordRules" v-model="password" prepend-icon="extension" label="Password"
                                                   type="password" required></v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout row>
                                 <v-flex xs-12>
-                                    <v-btn :loading="loading" color="accent" type="submit">
+                                    <v-btn :loading="loading" :disabled="!isFormValid" color="accent" type="submit">
                                         <span slot="loader" class="custom-loader">
                                             <v-icon light>cached</v-icon>
                                         </span>
@@ -55,8 +55,21 @@
         name: "Signin",
         data() {
             return {
+                isFormValid: true,
                 username: '',
-                password: ''
+                password: '',
+
+                usernameRules: [
+                    // Check if the username is in input
+                    username => !!username || 'Username is required',
+                    // Check if the username less then 10 characters
+                    username => username.length < 10 || 'Username should be less then 10 characters'
+                ],
+                passwordRules: [
+                    password => !!password || 'Password is required',
+                    // Check password is at least 4 characters
+                    password => password >= 4 || 'Password must be at least 7 characters'
+                ]
             }
         },
         computed: {
@@ -72,10 +85,12 @@
 
         methods: {
             handleSigninUser() {
-                this.$store.dispatch('signinUser', {
-                    username: this.username,
-                    password: this.password
-                });
+                if(this.$refs.form.validate()){
+                    this.$store.dispatch('signinUser', {
+                        username: this.username,
+                        password: this.password
+                    });
+                }
             }
         }
     }
